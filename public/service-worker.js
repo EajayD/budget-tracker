@@ -24,7 +24,7 @@ self.addEventListener("install", function(evt) {
   });
 
   // removes old cache data if exists
-  self.addEventListener("activate", function(evt) {
+self.addEventListener("activate", function(evt) {
     evt.waitUntil(
       caches.keys().then(keyList => {
         return Promise.all(
@@ -38,4 +38,34 @@ self.addEventListener("install", function(evt) {
       })
     );
     self.clients.claim();
-  });
+});
+
+// fetch cache data
+self.addEventListener("fetch", function(evt) {
+    // cache successful requests to the API; GET requests containing /api
+    if (evt.request.url.includes("/api/")) {
+      evt.respondWith(
+        caches.open(DATA_CACHE_NAME).then(cache => { //"data-cache-v1" - to CACHE data from API calls
+          return fetch(evt.request)
+            .then(response => {
+              // If the response was good, clone and store in cache.
+              if (response.status === 200) {
+                cache.put(evt.request.url, response.clone());
+              }
+  
+              return response;
+            })
+            .catch(err => {
+              //  Request failed, look for it in the cache.
+              return cache.match(evt.request);
+            });
+        }).catch(err => console.log(err))
+      );
+      return;
+    }
+    evt.respondWith(
+        caches.match(evt.request).then(function(response) {
+          return response || fetch(evt.request);
+        })
+      );
+    });
