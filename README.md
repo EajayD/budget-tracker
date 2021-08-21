@@ -31,7 +31,7 @@ This is a simple application that allows you to organize and keep track your cur
 
 Alternatively you can click this live deployed link powered be Heroku to get started
 
-<a href ="https://still-sands-72257.herokuapp.com/">https://still-sands-72257.herokuapp.com/</a>
+<a href ="https://limitless-springs-34594.herokuapp.com/">https://limitless-springs-34594.herokuapp.com/</a>
 
 Below is a preview of what to expect on your budget tracking journey
 
